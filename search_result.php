@@ -1,143 +1,119 @@
-<div class="container-fluid p-0 mb-2 mt-2 text-white text-center">
-<span class="badge rounded-pill bg-secondary p-3">
-  <h4>Profiles Based on Your Search</h4>
-  </span>  
-</div>
-<!DOCTYPE html>
-<html>
+<?php
+$conn = mysqli_connect("localhost", "root", "", "matrimonialprojectmahipal");
+?>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Bootstrap 5 Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-      
-.center-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-</style>
-    </style>
-            </head>
-            <body>
-            
-<?php
-if (isset($_COOKIE["login"])) {
-    $email = $_COOKIE["login"];
-    $conn = mysqli_connect("localhost", "root", "", "matrimonialprojectmahipal");
-    $rs = mysqli_query($conn, "select * from admin where email='$email'");
-    if ($r = mysqli_fetch_array($rs)) {
-        if (empty($_POST["gender"]) || empty($_POST["caste"]) || empty($_POST["religion"])) {
-            //header("location:search.php?empty=1");
-            echo "empty";
-            ?>
-            
-<?php
-        } 
-        
-        else {
-            $gender = $_POST["gender"];
-            $caste = $_POST["caste"];
-            $religion = $_POST["religion"];
-            $rec = mysqli_query($conn, "select * from admin where gender='$gender' AND caste='$caste' AND religion='$religion'");
-            $flag = false;
-            while ($record = mysqli_fetch_array($rec)){
-               $flag = true;
-            ?>  
-          
-            <div class="container-fluid">
-              
-            <section class="w-100 px-4 py-5" style="background-color: #9de2ff; border-radius: .5rem .5rem 0 0;">
-  <div class="row d-flex justify-content-center style=margin: 30px">
-  <div class="container fluid mt-4 ">
+  <title>View Profile</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    .profile-card {
+      margin-bottom: 20px;
+    }
+    .profile-img {
+      width: 100px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+    .profile-info {
+      padding-top: 20px;
+      font-weight: bold;
+    }
     
+
+  </style>
+</head>
+<body>
+
+<div class="container-fluid p-3" style="background-color: #e6f7ff;">
+
   <div class="row">
-    
-    <div class=" col-sm-3 col-lg-3 col-xl-6">
-      
-      <div class="card" style="border-radius: 5px;">
-        <div class="card-body p-4">
-          <div class="d-flex">
+    <!-- Main Searched Profiles -->
+    <div class="col-lg-8">
+      <h4 class="mb-4">Profiles Based on Your Search</h4>
+      <?php
+      if (isset($_POST["gender"], $_POST["religion"], $_POST["caste"])) {
+          $gender = $_POST["gender"];
+          $religion = $_POST["religion"];
+          $caste = $_POST["caste"];
+
+          $rec = mysqli_query($conn, "SELECT * FROM admin WHERE gender='$gender' AND religion='$religion' AND caste='$caste'");
+          while ($record = mysqli_fetch_array($rec)) {
+      ?>
+        <div class="card profile-card">
+          <div class="card-body d-flex">
             <div class="flex-shrink-0">
               <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                alt="Generic placeholder image" class="img-fluid" style="width: 180px ;margin: 30px; border-radius: 10px;">
+                   alt="Profile Image" class="img-fluid profile-img">
             </div>
-            <div class="container-fluid">
-            <div style="text-align: center; font-weight: bold; padding-top:30px">
-  <div>Name : <?=$record["fname"]." ".$record["lname"]?></div><br>
-  <div>Gender : <?=$record["gender"]?></div></br>
-  <div>Religion : <?=$record["religion"]?></div></br>
-  <div>Caste : <?=$record["caste"]?></div><br>
-  
-  
-</div>
-            </div>
-              
-            </div>
-            </div>
-            </div>
-              <div class="d-flex pt-1">
-                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary me-1 flex-grow-1">Chat</button>
-                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary flex-grow-1">Follow</button>
-                <a class="btn btn-primary" target="_blank" href="searched_profile.php?id=<?= $record["code"] ?>">View Profile</a>
-
+            <div class="flex-grow-1 profile-info">
+              <div>Name: <?= $record["fname"] . " " . $record["lname"] ?></div>
+              <div>Gender: <?= $record["gender"] ?></div>
+              <div>Religion: <?= $record["religion"] ?></div>
+              <div>Caste: <?= $record["caste"] ?></div>
+              <div class="mt-2">
+                <a class="btn btn-sm btn-primary" href="send_message.php?id=<?= $record["code"] ?>">Message</a>
+                <a class="btn btn-sm btn-info" href="searched_profile.php?id=<?= $record["code"] ?>">View Profile</a>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      
+      <?php
+          }
+      } else {
+          echo "<div class='alert alert-warning'>Search filters are missing.</div>";
+      }
+      ?>
     </div>
 
+    <!-- Suggested Profiles -->
+    <div class="col-lg-4">
+      <h5 class="mt-3">Suggested Profiles</h5>
+      <div id="record_suggestion"></div>
+    </div>
   </div>
-</section> 
-</body>
-</html> 
-            <?php 
-              
-            }
-            if ($flag) {
-              echo "Profile(s) found.";
-          } else {
-            ?>
-            <div class="container-fluid p-0 mt-10 bg-black text-white text-center">
-
-  
-  <h2 class="text-center mt-5">Sorry, no profiles found.</h2>
-
-  <a class="btn btn-info " target="__blank" href="search.php">Search More</a> 
 </div>
-            
-    
-   
 
-               
-                
-                      
-                
-                    
+<script>
+function fetchRandomData() {
+  $.post("random_profiles.php", function(data) {
+    let records = JSON.parse(data);
+    let html = '';
+    records.forEach(function(record) {
+      html += `
+        <div class="card profile-card">
+          <div class="card-body d-flex">
+            <div class="flex-shrink-0">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                   alt="Profile Image" class="img-fluid profile-img">
+            </div>
+            <div class="flex-grow-1 profile-info">
+              <div>Name: ${record.fname} ${record.lname}</div>
+              <div>Gender: ${record.gender}</div>
+              <div>Religion: ${record.religion}</div>
+              <div>Caste: ${record.caste}</div>
+              <div class="mt-2">
+                <a class="btn btn-sm btn-info" href="searched_profile.php?id=${record.code}">View Profile</a>
               </div>
-          </body>
-          </html>
-           <?php  
-          }
+            </div>
+          </div>
+        </div>`;
+    });
+   $("#record_suggestion").fadeOut(600, function() {
+  $(this).html(html).fadeIn(300);
+});
 
-
-            
-                //echo "found";
-        }
-    } else {
-        //header ("location:logout.php");
-        echo "not found";
-    }
-} else {
-    echo "cookies not found";
-    ?>
-    <a class="btn btn-info " target="__blank" href="login.php">Search More</a>
-    <?php
+  });
 }
-?>
+
+fetchRandomData();
+setInterval(fetchRandomData, 10000); // update every 10 sec
+</script>
+
+</body>
+</html>

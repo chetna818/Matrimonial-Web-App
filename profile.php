@@ -73,7 +73,7 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container mt-5">
 <div class="container-fluid p-0  text-white text-center">
 <span class="badge rounded-pill bg-black p-3">
   <h4>Welcome to Your Profile</h4>
@@ -103,7 +103,7 @@
                       <p class="text-secondary mb-1"><?php echo $r["occupation"]; ?></p>
                       <p class="text-muted font-size-sm"><?php echo $r["city"]." , ".$r["state"]." , ".$r["country"]; ?></p>
                       <button class="btn btn-primary">Follow</button>
-                      <button class="btn btn-outline-primary">Message</button>
+                      <a class="btn btn-success " target="__blank" href="inbox.php">Inbox</a>
                       <a class="btn btn-primary " target="__blank" href="change_pass.php">Change Password</a>
                     </div>
                   </div>
@@ -246,7 +246,7 @@
                   <div class="row">
                     <div class="col-sm-12 d-flex justify-content-between">
                       <a class="btn btn-info " target="__blank" href="logout.php">LOGOUT</a>
-                      <a class="btn btn-info " target="__blank" href="search.php">Search Profile</a>
+                      <a class="btn btn-info " target="__blank" href="search.php">Search Profiles</a>
                     </div>
                    
                   </div>

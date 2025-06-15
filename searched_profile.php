@@ -116,14 +116,21 @@ if (isset($_COOKIE["login"])) {
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+                    
 
                     <div class="mt-3">
                       <h4><?php echo $r["fname"] . " " . $r["lname"]; ?></h4>
                       <p class="text-secondary mb-1"><?php echo $r["occupation"]; ?></p>
                       <p class="text-muted font-size-sm"><?php echo $r["city"] . " , " . $r["state"] . " , " . $r["country"]; ?></p>
                       <button class="btn btn-primary">Follow</button>
-                      <button class="btn btn-outline-primary">Message</button>
-
+                      <?php
+                       $rec = mysqli_query($conn, "SELECT * FROM admin WHERE code='$code'");
+          while ($record = mysqli_fetch_array($rec)) {
+      ?>
+                      <a class="btn btn-info " target="__blank"  href="send_message.php?id=<?= $record["code"] ?>">Message</a>
+<?php
+          }
+                      ?>
                     </div>
                   </div>
                 </div>
@@ -268,8 +275,17 @@ if (isset($_COOKIE["login"])) {
                     <div class="col-sm-9 text-secondary">
                       <p><strong></strong> <?php echo $r["country"]; ?></p>
                     </div>
-                  </div>
+                  </div></br>
+                  <div class="col-lg-8">
+       <form method="post" action="message.php?id=<?=$code?>">
+        <h6>Message :</h6><br>
 
+        <textarea name="message" rows=4 class="form-control" required></textarea><br><br>
+        <input type="submit" value="Send" class="btn btn-danger">
+       </form>
+      
+
+    </div>
                   <div class="row">
 
                   </div>

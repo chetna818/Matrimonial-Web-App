@@ -144,7 +144,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-danger btn-lg mb-1" data-mdb-ripple-init>
-                                Login
+                                Register
                             </button>
 
                             </form>
